@@ -1,0 +1,73 @@
+.request-card {
+  padding: 18px 20px;
+  border-radius: $radius-lg;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  transition: transform $transition, border-color $transition, box-shadow $transition;
+  box-shadow: var(--shadow-card);
+}
+
+.request-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-hover);
+}
+
+.request-card__top {
+  @include flex-between;
+
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.request-card__id {
+  font-family: $font-mono;
+  font-size: 13px;
+  color: var(--text-3);
+  margin-right: auto;
+}
+
+.request-card__urgency {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.request-card__urgency--emergency {
+  color: var(--danger);
+}
+
+.request-card__name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.request-card__meta {
+  font-family: $font-mono;
+  font-size: 13px;
+  color: var(--text-2);
+  margin-bottom: 9px;
+}
+
+.request-card__problem {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.55;
+}
+
+.request-card__foot {
+  margin-top: 14px;
+  padding-top: 13px;
+  border-top: 1px solid var(--border);
+}
+
+.request-card__source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-3);
+}

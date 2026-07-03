@@ -1,0 +1,78 @@
+// src/assets/scss/_themes.scss
+
+// СВЕТЛАЯ ТЕМА (дефолт)
+:root {
+  // Поверхности
+  --surface: #f4f5f7; // фон страницы
+  --surface-1: #ffffff; // карточка
+  --surface-2: #f4f5f7; // приподнятый блок / сайдбар
+  --glass: rgba(255, 255, 255, 0.7); // стекло (точечно)
+
+  // Текст
+  --text: #16202e;
+  --text-2: #5c6675;
+  --text-3: #9aa4b2;
+
+  // Границы
+  --border: rgba(22, 32, 46, 0.1);
+  --border-hover: rgba(22, 32, 46, 0.2);
+
+  // Статусы (цвет + soft-фон бейджа)
+  --status-new: #2563eb;
+  --status-new-soft: #e6f0fe;
+  --status-work: #b45309;
+  --status-work-soft: #fef3c7;
+  --status-done: #047857;
+  --status-done-soft: #d1fae5;
+  --status-lost: #6b7280;
+  --status-lost-soft: #f0f1f3;
+
+  --danger: #dc2626;
+  --danger-soft: #fee2e2;
+
+  // Тени
+  --shadow-card: 0 1px 3px rgba(22, 32, 46, 0.08);
+  --shadow-hover: 0 12px 40px rgba(22, 32, 46, 0.12);
+
+  // --- АКЦЕНТ (отдельный слой — шов под vertical/tenant) ---
+  --accent: #f59e0b; // заливка / бренд
+  --accent-text: #b45309; // акцентный ТЕКСТ (тёмный для контраста на белом)
+  --accent-soft: #fef3c7; // бледный фон под бейдж/hover
+  --accent-contrast: #1a1200; // текст ПОВЕРХ заливки --accent
+}
+
+// ТЁМНАЯ ТЕМА (переопределяет те же токены)
+[data-theme='dark'] {
+  --surface: #0a0e14;
+  --surface-1: #111a26;
+  --surface-2: #0d131c;
+  --glass: rgba(255, 255, 255, 0.05);
+
+  --text: #e8ecf2;
+  --text-2: #9aa4b2;
+  --text-3: #5c6675;
+
+  --border: rgba(255, 255, 255, 0.09);
+  --border-hover: rgba(255, 255, 255, 0.16);
+
+  --status-new: #4a9eff;
+  --status-new-soft: rgba(74, 158, 255, 0.12);
+  --status-work: #ffb020;
+  --status-work-soft: rgba(255, 176, 32, 0.12);
+  --status-done: #10d391;
+  --status-done-soft: rgba(16, 211, 145, 0.12);
+  --status-lost: #9aa4b2;
+  --status-lost-soft: rgba(154, 164, 178, 0.1);
+
+  --danger: #ff4d5e;
+  --danger-soft: rgba(255, 77, 94, 0.12);
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+
+  // --- АКЦЕНТ (в тёмной — яркий, читается на графите) ---
+  --accent: #ffb020;
+  --accent-text: #ffb020; // на тёмном тот же яркий работает как текст
+  --accent-soft: rgba(255, 176, 32, 0.12);
+  --accent-contrast: #1a1200;
+}

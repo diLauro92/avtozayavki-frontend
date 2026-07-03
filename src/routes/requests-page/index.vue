@@ -1,0 +1,64 @@
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
+
+import { REQUEST_FILTERS, type FilterKey } from '@/constants/request-filters'
+import { useRequestsStore } from '@/stores'
+import RequestCard from '@/components/request-card/index.vue'
+
+const store = useRequestsStore()
+
+const activeFilter = ref<FilterKey>('all')
+
+const activeStatuses = computed(() => {
+  const tab = REQUEST_FILTERS.find((filter) => filter.key === activeFilter.value)
+
+  return tab ? tab.statuses : []
+})
+
+const filteredRequests = computed(() => {
+  if (activeStatuses.value.length === 0)
+    return store.list
+
+  return store.list.filter((request) => activeStatuses.value.includes(request.status))
+})
+
+const isEmpty = computed(() => store.isLoaded && filteredRequests.value.length === 0)
+
+function setFilter(key: FilterKey): void {
+  activeFilter.value = key
+}
+
+onMounted(() => {
+  store.loadRequests()
+})
+</script>
+
+<template>
+  <div class="requests-page">
+    <header class="requests-page__head">
+      <h1 class="requests-page__title">Входящие заявки</h1>
+    </header>
+
+    <div class="requests-page__filters">
+      <button
+        v-for="filter in REQUEST_FILTERS"
+        :key="filter.key"
+        class="requests-page__chip"
+        :class="{ 'requests-page__chip--active': filter.key === activeFilter }"
+        type="button"
+        @click="setFilter(filter.key)"
+      >
+        {{ filter.label }}
+      </button>
+    </div>
+
+    <p v-if="!store.isLoaded" class="requests-page__state">Загрузка…</p>
+    <p v-else-if="isEmpty" class="requests-page__state">Заявок нет</p>
+
+    <div v-else class="requests-page__feed">
+      <RequestCard v-for="request in filteredRequests" :key="request.id" :request="request" />
+    </div>
+  </div>
+</template>
+
+<style src="./style.scss" lang="scss"></style>

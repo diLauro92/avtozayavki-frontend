@@ -1,0 +1,79 @@
+.status-select {
+  position: relative;
+}
+
+.status-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: $radius-pill;
+  transition: opacity $transition;
+}
+
+.status-select__trigger:hover {
+  opacity: 0.8;
+}
+
+.status-select__chevron {
+  color: var(--text-3);
+}
+
+.status-select__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal-backdrop;
+}
+
+.status-select__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: $z-modal;
+  min-width: 190px;
+  padding: 6px;
+  border-radius: $radius-md;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-hover);
+}
+
+.status-select__option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: $radius-sm;
+  font-size: 13px;
+  color: var(--text);
+  text-align: left;
+  transition: background $transition;
+}
+
+.status-select__option:hover {
+  background: var(--surface-2);
+}
+
+.status-select__option--active {
+  background: var(--surface-2);
+}
+
+.status-select__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-select__dot--new {
+  background: var(--status-new);
+}
+.status-select__dot--work {
+  background: var(--status-work);
+}
+.status-select__dot--done {
+  background: var(--status-done);
+}
+.status-select__dot--lost {
+  background: var(--status-lost);
+}

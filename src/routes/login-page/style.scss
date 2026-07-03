@@ -1,0 +1,87 @@
+.login-page {
+  @include flex-center;
+
+  min-height: calc(100vh - 84px);
+  padding: 20px;
+}
+
+.login-page__card {
+  width: 100%;
+  max-width: 380px;
+  padding: 32px;
+  border-radius: $radius-xl;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+.login-page__title {
+  font-family: $font-display;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.login-page__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-page__label {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.login-page__input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: $radius-md;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color $transition;
+}
+
+.login-page__input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.login-page__input::placeholder {
+  color: var(--text-3);
+}
+
+.login-page__submit {
+  padding: 11px;
+  border-radius: $radius-md;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity $transition;
+}
+
+.login-page__submit:hover {
+  opacity: 0.9;
+}
+
+.login-page__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-page__error {
+  font-size: 13px;
+  color: var(--danger);
+  text-align: center;
+}

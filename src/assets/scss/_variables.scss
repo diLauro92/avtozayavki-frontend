@@ -1,0 +1,31 @@
+// src/assets/scss/_variables.scss
+
+// Брейкпоинты — mobile-first (min-width!)
+// Базовые стили = мобилка, миксины наращивают вверх
+$bp-tablet: 768px;
+$bp-desktop: 1024px;
+$bp-laptop: 1366px;
+$bp-wide: 1600px;
+
+// Радиусы
+$radius-sm: 6px;
+$radius-md: 11px;
+$radius-lg: 16px;
+$radius-xl: 18px;
+$radius-pill: 999px;
+
+// Транзишены
+$transition: 0.18s ease;
+$transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+// Шрифты
+$font-body: 'Inter', system-ui, -apple-system, sans-serif;
+$font-display: 'Space Grotesk', system-ui, sans-serif;
+$font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+// z-index
+$z-dropdown: 101;
+$z-sticky: 200;
+$z-modal-backdrop: 900;
+$z-modal: 1000;
+$z-toast: 1100;
