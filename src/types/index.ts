@@ -5,6 +5,7 @@ export type {
   RequestSource,
   RequestUrgency,
   CreateRequestPayload,
+  SlaZone
 } from './request'
 
 export type { User } from './user'

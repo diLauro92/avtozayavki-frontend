@@ -1,0 +1,68 @@
+.sla-indicator {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.sla-indicator__ring {
+  transform: rotate(-90deg); // дуга стартует сверху
+}
+
+.sla-indicator__track {
+  fill: none;
+  stroke: var(--surface-2);
+  stroke-width: 4;
+}
+
+.sla-indicator__arc {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset $transition-slow;
+}
+
+.sla-indicator__value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-mono;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sla-indicator--fresh .sla-indicator__arc {
+  stroke: var(--sla-fresh);
+}
+.sla-indicator--fresh .sla-indicator__value {
+  color: var(--sla-fresh);
+}
+
+.sla-indicator--warning .sla-indicator__arc {
+  stroke: var(--sla-warning);
+}
+.sla-indicator--warning .sla-indicator__value {
+  color: var(--sla-warning);
+}
+
+.sla-indicator--overdue .sla-indicator__arc {
+  stroke: var(--sla-overdue);
+}
+.sla-indicator--overdue .sla-indicator__value {
+  color: var(--sla-overdue);
+}
+
+.sla-indicator--overdue {
+  animation: sla-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes sla-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--sla-overdue);
+  }
+  50% {
+    box-shadow: 0 0 12px 2px var(--sla-overdue);
+  }
+}

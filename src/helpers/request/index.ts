@@ -1,5 +1,11 @@
 // src/helpers/request/index.ts
-import type { RequestSource, RequestStatus, RequestUrgency } from '@/types'
+import type { Request, RequestSource, RequestStatus, RequestUrgency, SlaZone } from '@/types'
+
+const SLA_WARNING_MINUTES = 15 // жёлтая зона от 15 мин
+const SLA_OVERDUE_MINUTES = 60 // красная от 60 мин
+const SLA_FULL_MINUTES = 60 // дуга полная
+
+type StatusColor = 'new' | 'work' | 'done' | 'lost'
 
 const STATUS_TEXT: Record<RequestStatus, string> = {
   new: 'Новая',
@@ -10,8 +16,6 @@ const STATUS_TEXT: Record<RequestStatus, string> = {
   lost: 'Потеряна',
   follow_up: 'Повторное касание',
 }
-
-type StatusColor = 'new' | 'work' | 'done' | 'lost'
 
 const STATUS_COLOR: Record<RequestStatus, StatusColor> = {
   new: 'new',
@@ -68,4 +72,34 @@ export function getUrgencyText(urgency: RequestUrgency): string {
 
 export function getSourceIcon(source: RequestSource): string {
   return SOURCE_ICON[source]
+}
+
+export function getSlaZone(request: Request, nowMS: number): SlaZone | null {
+  if (request.status !== 'new') return null // только new заявки
+
+  const createdMs = new Date(request.created_at).getTime()
+  const ageMinutes = (nowMS - createdMs) / 60000 // возраст заявки в минутах
+
+  if (ageMinutes >= SLA_OVERDUE_MINUTES)
+    return 'overdue'
+
+  if (ageMinutes >= SLA_WARNING_MINUTES)
+    return 'warning'
+
+  return 'fresh'
+}
+
+export function getSlaProgress(request: Request, nowMs: number): number {
+  const createdMs = new Date(request.created_at).getTime()
+  const ageMinutes = (nowMs - createdMs) / 60000
+  const progress = (ageMinutes / SLA_FULL_MINUTES) * 100 // % от 60 мин
+
+  return Math.max(0, Math.min(progress, 100))
+}
+
+export function getSlaMinutes(request: Request, nowMs: number): number {
+  const createdMs = new Date(request.created_at).getTime()
+  const ageMinutes = (nowMs - createdMs) / 60000
+
+  return Math.max(0, Math.floor(ageMinutes))
 }

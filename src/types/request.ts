@@ -37,3 +37,5 @@ export interface CreateRequestPayload {
   car_info?: string
   urgency?: RequestUrgency
 }
+
+export type SlaZone = 'fresh' | 'warning' | 'overdue'
