@@ -28,3 +28,12 @@ export interface Request {
   created_at: string
   updated_at: string
 }
+
+export interface CreateRequestPayload {
+  source: RequestSource
+  phone: string
+  problem: string
+  client_name?: string
+  car_info?: string
+  urgency?: RequestUrgency
+}

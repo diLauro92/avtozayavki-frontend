@@ -18,3 +18,9 @@ export function formatDateTime(iso: string): string {
     minute: '2-digit',
   }).format(date)
 }
+
+export const isValidPhone = (phone: string): boolean => {
+  const digits = phone.replace(/\D/g, '')
+
+  return digits.length >= 10 && digits.length <= 11
+}

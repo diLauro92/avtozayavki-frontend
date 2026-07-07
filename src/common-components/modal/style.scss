@@ -1,0 +1,72 @@
+.modal {
+  padding: 0;
+  border: none;
+  background: transparent;
+  max-width: 460px;
+  width: calc(100% - 32px);
+  margin: auto; // +
+
+  // анимация появления модалки
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity $transition,
+    transform $transition,
+    overlay $transition allow-discrete,
+    display $transition allow-discrete;
+}
+
+.modal[open] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+// стартовое состояние при появлении
+@starting-style {
+  .modal[open] {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition:
+    opacity $transition,
+    overlay $transition allow-discrete,
+    display $transition allow-discrete;
+}
+
+.modal[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .modal[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+.modal__box {
+  position: relative;
+  padding: 28px;
+  border-radius: $radius-xl;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-hover);
+}
+
+.modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  color: var(--text-3);
+  transition: color $transition;
+}
+
+.modal__close:hover {
+  color: var(--text);
+}

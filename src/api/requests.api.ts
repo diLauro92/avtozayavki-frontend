@@ -1,4 +1,4 @@
-import type { Request, RequestStatus } from '@/types'
+import type { CreateRequestPayload, Request, RequestStatus } from '@/types'
 import { http } from './http'
 
 interface ListResponse<T> {
@@ -25,4 +25,10 @@ export async function updateRequestStatus(id: number, status: RequestStatus): Pr
   const response = await http.patch<ItemResponse<Request>>(`/api/requests/${id}/status`, { status })
 
   return response.data.data
+}
+
+export async function createRequest(payload: CreateRequestPayload): Promise<Request> {
+  const { data } = await http.post<ItemResponse<Request>>('/api/requests', payload)
+
+  return data.data
 }

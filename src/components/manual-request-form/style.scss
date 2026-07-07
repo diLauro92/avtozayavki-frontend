@@ -1,0 +1,75 @@
+.manual-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.manual-form__title {
+  margin: 0;
+  font-family: $font-display;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.manual-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.manual-form__label {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.manual-form__input {
+  padding: 10px 12px;
+  font-family: $font-body;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  transition:
+    border-color $transition,
+    background $transition;
+}
+
+.manual-form__input::placeholder {
+  color: var(--text-3);
+}
+
+.manual-form__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface-1);
+}
+
+.manual-form__input--area {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.manual-form__submit {
+  margin-top: 4px;
+  padding: 12px;
+  font-family: $font-display;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: opacity $transition;
+}
+
+.manual-form__submit:hover {
+  opacity: 0.9;
+}
+
+.manual-form__submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

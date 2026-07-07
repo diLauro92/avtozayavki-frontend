@@ -4,6 +4,8 @@ import { computed, onMounted, ref } from 'vue'
 import { REQUEST_FILTERS, type FilterKey } from '@/constants/request-filters'
 import { useRequestsStore } from '@/stores'
 import RequestCard from '@/components/request-card/index.vue'
+import Modal from '@/common-components/modal/index.vue'
+import ManualRequestForm from '@/components/manual-request-form/index.vue'
 
 const store = useRequestsStore()
 
@@ -24,6 +26,16 @@ const filteredRequests = computed(() => {
 
 const isEmpty = computed(() => store.isLoaded && filteredRequests.value.length === 0)
 
+const isModalOpen = ref(false)
+
+function openModal() {
+  isModalOpen.value = true
+}
+
+function closeModal() {
+  isModalOpen.value = false
+}
+
 function setFilter(key: FilterKey): void {
   activeFilter.value = key
 }
@@ -37,6 +49,10 @@ onMounted(() => {
   <div class="requests-page">
     <header class="requests-page__head">
       <h1 class="requests-page__title">Входящие заявки</h1>
+
+      <button class="requests-page__add" type="button" @click="openModal">
+        Новая заявка
+      </button>
     </header>
 
     <div class="requests-page__filters">
@@ -59,6 +75,10 @@ onMounted(() => {
       <RequestCard v-for="request in filteredRequests" :key="request.id" :request="request" />
     </div>
   </div>
+
+  <Modal v-model:open="isModalOpen">
+    <ManualRequestForm @success="closeModal" />
+  </Modal>
 </template>
 
 <style src="./style.scss" lang="scss"></style>

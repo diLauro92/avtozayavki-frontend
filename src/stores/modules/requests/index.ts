@@ -2,8 +2,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { Request, RequestStatus } from '@/types'
-import { fetchRequests, updateRequestStatus } from '@/api/requests.api'
+import type { CreateRequestPayload, Request, RequestStatus } from '@/types'
+import { createRequest as createRequestApi, fetchRequests, updateRequestStatus } from '@/api/requests.api'
 
 export const useRequestsStore = defineStore('requests', () => {
   const list = ref<Request[]>([])
@@ -23,10 +23,19 @@ export const useRequestsStore = defineStore('requests', () => {
     list.value = list.value.map((request) => request.id === updated.id ? updated : request)
   }
 
+  async function createRequest(payload: CreateRequestPayload): Promise<Request> {
+    const newRequest = await createRequestApi(payload)
+
+    list.value = [newRequest, ...list.value]
+
+    return newRequest
+  }
+
   return {
     list,
     isLoaded,
     loadRequests,
-    changeStatus
+    changeStatus,
+    createRequest
   }
 })
