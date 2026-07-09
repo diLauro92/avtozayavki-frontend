@@ -16,6 +16,11 @@ export const useRequestsStore = defineStore('requests', () => {
     isLoaded.value = true
   }
 
+  // без guard, без флага
+  async function refreshRequests(): Promise<void> {
+    list.value = await fetchRequests()
+  }
+
   async function changeStatus(id: number, status: RequestStatus): Promise<void> {
     const updated = await updateRequestStatus(id, status)
 
@@ -36,6 +41,7 @@ export const useRequestsStore = defineStore('requests', () => {
     isLoaded,
     loadRequests,
     changeStatus,
-    createRequest
+    createRequest,
+    refreshRequests
   }
 })

@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 import { REQUEST_FILTERS, type FilterKey } from '@/constants/request-filters'
 import { useRequestsStore } from '@/stores'
 import RequestCard from '@/components/request-card/index.vue'
 import Modal from '@/common-components/modal/index.vue'
 import ManualRequestForm from '@/components/manual-request-form/index.vue'
+import { POLLING_INTERVAL } from '@/constants/polling'
 
 const store = useRequestsStore()
 
 const activeFilter = ref<FilterKey>('all')
+
+let pollingId: ReturnType<typeof setInterval> | null = null
+
 
 const activeStatuses = computed(() => {
   const tab = REQUEST_FILTERS.find((filter) => filter.key === activeFilter.value)
@@ -42,6 +46,17 @@ function setFilter(key: FilterKey): void {
 
 onMounted(() => {
   store.loadRequests()
+
+  pollingId = setInterval(() => {
+    store.refreshRequests()
+  }, POLLING_INTERVAL)
+})
+
+onUnmounted(() => {
+  if (pollingId !== null) {
+    clearInterval(pollingId)
+    pollingId = null
+  }
 })
 </script>
 
