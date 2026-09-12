@@ -1,5 +1,6 @@
 import type { CreateRequestPayload, Request, RequestStatus } from '@/types'
 import { http } from './http'
+import type { RequestDetails } from '@/types/request.ts'
 
 interface ListResponse<T> {
   data: T[]
@@ -15,8 +16,8 @@ export async function fetchRequests(): Promise<Request[]> {
   return response.data.data
 }
 
-export async function fetchRequestById(id: number): Promise<Request | null> {
-  const response = await http.get<ItemResponse<Request>>(`/api/requests/${id}`)
+export async function fetchRequestById(id: number): Promise<RequestDetails> {
+  const response = await http.get<ItemResponse<RequestDetails>>(`/api/requests/${id}`)
 
   return response.data.data
 }

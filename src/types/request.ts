@@ -1,11 +1,5 @@
 export type RequestStatus =
-  | 'new'
-  | 'contacted'
-  | 'assigned'
-  | 'processing'
-  | 'success'
-  | 'lost'
-  | 'follow_up'
+  'new' | 'contacted' | 'assigned' | 'processing' | 'success' | 'lost' | 'follow_up'
 
 export type RequestSource = 'telegram' | 'manual'
 
@@ -39,3 +33,21 @@ export interface CreateRequestPayload {
 }
 
 export type SlaZone = 'fresh' | 'warning' | 'overdue'
+
+export interface RequestResponsible {
+  id: number
+  name: string
+}
+
+export interface StatusHistoryItem {
+  id: number
+  old_status: RequestStatus | null
+  new_status: RequestStatus
+  changed_by_name: string | null
+  created_at: string | null
+}
+
+export interface RequestDetails extends Request {
+  responsible: RequestResponsible | null
+  status_history: StatusHistoryItem[]
+}
