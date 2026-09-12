@@ -22,5 +22,5 @@ export function formatDateTime(iso: string): string {
 export const isValidPhone = (phone: string): boolean => {
   const digits = phone.replace(/\D/g, '')
 
-  return digits.length >= 10 && digits.length <= 11
+  return /^7\d{10}$/.test(digits)
 }

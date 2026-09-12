@@ -8,7 +8,12 @@ const emit = defineEmits<{
 }>()
 
 const store = useRequestsStore()
-const { form, isValid, resetForm } = useManualRequestForm()
+const { form, isValid, resetForm, fullPhone } = useManualRequestForm()
+
+const phoneMask = {
+  mask: '+7 (###) ###-##-##',
+  preProcess: (value: string) => value.replace(/^(\+?7|8)/, ''),
+}
 
 function onMaska(event: CustomEvent) {
   form.phoneRaw = event.detail.unmasked
@@ -17,7 +22,7 @@ function onMaska(event: CustomEvent) {
 async function handleSubmit() {
   await store.createRequest({
     source: 'manual',
-    phone: form.phoneRaw,
+    phone: fullPhone.value,
     problem: form.problem,
     client_name: form.client_name || undefined,
     car_info: form.car_info || undefined,
@@ -37,7 +42,7 @@ async function handleSubmit() {
       <span class="manual-form__label">Телефон *</span>
       <input
         v-model="form.phone"
-        v-maska="'+7 (###) ###-##-##'"
+        v-maska="phoneMask"
         @maska="onMaska"
         class="manual-form__input"
         type="tel"
@@ -57,12 +62,7 @@ async function handleSubmit() {
 
     <label class="manual-form__field">
       <span class="manual-form__label">Имя клиента</span>
-      <input
-        v-model="form.client_name"
-        class="manual-form__input"
-        type="text"
-        placeholder="Иван"
-      />
+      <input v-model="form.client_name" class="manual-form__input" type="text" placeholder="Иван" />
     </label>
 
     <label class="manual-form__field">
@@ -86,13 +86,7 @@ async function handleSubmit() {
       </select>
     </label>
 
-    <button
-      class="manual-form__submit"
-      type="submit"
-      :disabled="!isValid"
-    >
-      Создать заявку
-    </button>
+    <button class="manual-form__submit" type="submit" :disabled="!isValid">Создать заявку</button>
   </form>
 </template>
 

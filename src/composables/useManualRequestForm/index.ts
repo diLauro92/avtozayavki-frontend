@@ -27,9 +27,11 @@ export const useManualRequestForm = () => {
     Object.assign(form, createEmptyForm())
   }
 
+  const fullPhone = computed(() => (form.phoneRaw ? `7${form.phoneRaw}` : ''))
+
   const isValid = computed(() => {
-    return isValidPhone(form.phoneRaw) && form.problem.trim().length > 0
+    return isValidPhone(fullPhone.value) && form.problem.trim().length > 0
   })
 
-  return { form, resetForm, isValid }
+  return { form, resetForm, isValid, fullPhone }
 }
