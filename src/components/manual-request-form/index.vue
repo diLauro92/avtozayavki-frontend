@@ -2,6 +2,8 @@
 import { useManualRequestForm } from '@/composables/useManualRequestForm'
 import { useRequestsStore } from '@/stores'
 import { vMaska } from 'maska/vue'
+import { ref } from 'vue'
+import { ApiError } from '@/api/http.ts'
 
 const emit = defineEmits<{
   success: []
@@ -9,6 +11,9 @@ const emit = defineEmits<{
 
 const store = useRequestsStore()
 const { form, isValid, resetForm, fullPhone } = useManualRequestForm()
+
+const errorMessage = ref('')
+const isSubmitting = ref(false)
 
 const phoneMask = {
   mask: '+7 (###) ###-##-##',
@@ -20,17 +25,26 @@ function onMaska(event: CustomEvent) {
 }
 
 async function handleSubmit() {
-  await store.createRequest({
-    source: 'manual',
-    phone: fullPhone.value,
-    problem: form.problem,
-    client_name: form.client_name || undefined,
-    car_info: form.car_info || undefined,
-    urgency: form.urgency || undefined,
-  })
+  errorMessage.value = ''
+  isSubmitting.value = true
 
-  resetForm()
-  emit('success')
+  try {
+    await store.createRequest({
+      source: 'manual',
+      phone: fullPhone.value,
+      problem: form.problem,
+      client_name: form.client_name || undefined,
+      car_info: form.car_info || undefined,
+      urgency: form.urgency || undefined,
+    })
+
+    resetForm()
+    emit('success')
+  } catch (error) {
+    errorMessage.value = error instanceof ApiError ? error.message : 'Не удалось создать заявку.'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
 
@@ -86,7 +100,11 @@ async function handleSubmit() {
       </select>
     </label>
 
-    <button class="manual-form__submit" type="submit" :disabled="!isValid">Создать заявку</button>
+    <p v-if="errorMessage" class="manual-form__error">{{ errorMessage }}</p>
+
+    <button class="manual-form__submit" type="submit" :disabled="!isValid || isSubmitting">
+      {{ isSubmitting ? 'Отправляем…' : 'Создать заявку' }}
+    </button>
   </form>
 </template>
 

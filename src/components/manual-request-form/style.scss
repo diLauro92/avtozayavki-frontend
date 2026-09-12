@@ -73,3 +73,12 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+.manual-form__error {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: $radius-md;
+}
