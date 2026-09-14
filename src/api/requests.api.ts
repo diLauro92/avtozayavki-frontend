@@ -1,6 +1,5 @@
-import type { CreateRequestPayload, Request, RequestStatus } from '@/types'
+import type { Comment, CreateRequestPayload, Request, RequestDetails, RequestStatus } from '@/types'
 import { http } from './http'
-import type { RequestDetails } from '@/types/request.ts'
 
 interface ListResponse<T> {
   data: T[]
