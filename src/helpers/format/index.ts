@@ -24,3 +24,10 @@ export const isValidPhone = (phone: string): boolean => {
 
   return /^7\d{10}$/.test(digits)
 }
+
+export function formatTime(date: Date): string {
+  return new Intl.DateTimeFormat('ru-RU', {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date)
+}

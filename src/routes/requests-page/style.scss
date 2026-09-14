@@ -80,3 +80,29 @@
   flex-direction: column;
   gap: 12px;
 }
+
+.requests-page__stale {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: $radius-md;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.requests-page__stale-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.requests-page__stale-retry {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--danger);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

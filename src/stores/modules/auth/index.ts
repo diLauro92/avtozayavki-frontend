@@ -27,12 +27,17 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = null
   }
 
+  // сессия умерла на стороне сервера: чистим локально, без запроса
+  function resetUser(): void {
+    user.value = null
+  }
 
   return {
     user,
     isAuthenticated,
     login,
     fetchUser,
-    logout
+    logout,
+    resetUser,
   }
 })

@@ -39,9 +39,9 @@ router.beforeEach(async (to) => {
 
   const isLoginPage = to.name === 'login'
 
-  // если не залогинен кидаем на логин
+  // если не залогинен кидаем на логин и запоминаем, куда шли
   if (!authStore.isAuthenticated && !isLoginPage) {
-    return { name: 'login' }
+    return { name: 'login', query: { redirect: to.fullPath } }
   }
 
   // залогинен - редиректим на ленту

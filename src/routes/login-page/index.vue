@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useAuthStore } from "@/stores";
-import { useRouter } from "vue-router";
+import { computed, ref } from 'vue'
+import { useAuthStore } from '@/stores'
+import { useRoute, useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
 
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const error = ref('')
 const isLoading = ref(false)
@@ -20,7 +21,9 @@ async function handleSubmit(): Promise<void> {
 
   try {
     await authStore.login(email.value, password.value)
-    router.push({ name: 'requests' })
+    const redirect = route.query.redirect
+
+    router.push(typeof redirect === 'string' ? redirect : { name: 'requests' })
   } catch {
     error.value = 'Неверный email или пароль'
   } finally {
@@ -58,11 +61,7 @@ async function handleSubmit(): Promise<void> {
 
         <p v-if="error" class="login-page__error">{{ error }}</p>
 
-        <button
-          class="login-page__submit"
-          type="submit"
-          :disabled="isLoading"
-        >
+        <button class="login-page__submit" type="submit" :disabled="isLoading">
           {{ submitText }}
         </button>
       </form>

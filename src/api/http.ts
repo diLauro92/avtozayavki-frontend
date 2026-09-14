@@ -16,6 +16,12 @@ export class ApiError extends Error {
   }
 }
 
+let unauthorizedHandler: (() => void) | null = null
+
+export function setUnauthorizedHandler(handler: () => void): void {
+  unauthorizedHandler = handler
+}
+
 export const http = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
@@ -30,6 +36,14 @@ http.interceptors.response.use(
   (error: AxiosError<LaravelErrorResponse>) => {
     const status = error.response?.status ?? null
     const data = error.response?.data
+
+    const isAuthRequest = ['/api/login', '/api/logout', '/api/user'].some((url) =>
+      error.config?.url?.includes(url),
+    )
+
+    if (status === 401 && !isAuthRequest) {
+      unauthorizedHandler?.()
+    }
 
     const message =
       status === null

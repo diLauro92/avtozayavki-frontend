@@ -14,6 +14,8 @@ import type { RequestDetails } from '@/types/request.ts'
 export const useRequestsStore = defineStore('requests', () => {
   const list = ref<Request[]>([])
   const isLoaded = ref(false)
+  const lastSyncedAt = ref<Date | null>(null)
+  const isStale = ref(false)
   const current = ref<RequestDetails | null>(null)
   const isCurrentLoading = ref(false)
 
@@ -22,11 +24,18 @@ export const useRequestsStore = defineStore('requests', () => {
 
     list.value = await fetchRequests()
     isLoaded.value = true
+    lastSyncedAt.value = new Date()
   }
 
   // без guard, без флага
   async function refreshRequests(): Promise<void> {
-    list.value = await fetchRequests()
+    try {
+      list.value = await fetchRequests()
+      lastSyncedAt.value = new Date()
+      isStale.value = false
+    } catch {
+      isStale.value = true
+    }
   }
 
   async function changeStatus(id: number, status: RequestStatus): Promise<void> {
@@ -70,6 +79,8 @@ export const useRequestsStore = defineStore('requests', () => {
     refreshRequests,
     current,
     isCurrentLoading,
-    loadRequest
+    loadRequest,
+    lastSyncedAt,
+    isStale,
   }
 })
