@@ -20,7 +20,11 @@ useTheme().initTheme()
 setUnauthorizedHandler(() => {
   useAuthStore().resetUser()
 
-  if (router.currentRoute.value.name !== 'login') router.push({ name: 'login' })
+  const currentRoute = router.currentRoute.value
+
+  if (currentRoute.name === 'login') return
+
+  router.push({ name: 'login', query: { redirect: currentRoute.fullPath } })
 })
 
 app.mount('#app')

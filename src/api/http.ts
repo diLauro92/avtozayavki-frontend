@@ -41,14 +41,16 @@ http.interceptors.response.use(
       error.config?.url?.includes(url),
     )
 
-    if (status === 401 && !isAuthRequest) {
+    const isSessionExpired = status === 401 || status === 419
+
+    if (isSessionExpired && !isAuthRequest) {
       unauthorizedHandler?.()
     }
 
     const message =
       status === null
         ? 'Нет связи с сервером. Проверьте интернет.'
-        : status === 401 ? 'Сессия истекла. Войдите заново.'
+        : isSessionExpired ? 'Сессия истекла. Войдите заново.'
         : status === 403 ? 'Недостаточно прав для этого действия.'
         : status >= 500 ? 'Ошибка на сервере. Попробуйте позже.'
         : (data?.message ?? 'Что-то пошло не так. Попробуйте ещё раз.')
