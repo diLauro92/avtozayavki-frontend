@@ -45,3 +45,15 @@
   color: var(--danger);
   border-color: var(--border-hover);
 }
+
+.app-shell__nav-link {
+  padding: 8px 16px;
+  border-radius: $radius-md;
+  color: var(--text-2);
+  font-size: 14px;
+  transition: color $transition;
+}
+
+.app-shell__nav-link:hover {
+  color: var(--text);
+}

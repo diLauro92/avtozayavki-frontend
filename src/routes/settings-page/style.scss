@@ -1,0 +1,128 @@
+.settings-page {
+  @include container;
+
+  max-width: 640px;
+  padding-top: 24px;
+  padding-bottom: 40px;
+}
+
+.settings-page__title {
+  margin-bottom: 20px;
+  font-family: $font-display;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+
+  @include tablet {
+    font-size: 28px;
+  }
+}
+
+.settings-page__card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  background: var(--surface-1);
+  box-shadow: var(--shadow-card);
+}
+
+.settings-page__subtitle {
+  margin-bottom: 8px;
+  font-family: $font-display;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.settings-page__hint {
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.settings-page__status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: $radius-pill;
+  background: var(--status-lost-soft);
+  color: var(--status-lost);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.settings-page__status--on {
+  background: var(--status-done-soft);
+  color: var(--status-done);
+}
+
+.settings-page__link-box {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  background: var(--surface-2);
+}
+
+.settings-page__link {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: underline;
+}
+
+.settings-page__waiting {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.settings-page__error {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: $radius-md;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.settings-page__actions {
+  margin-top: 20px;
+}
+
+.settings-page__button {
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  background: var(--surface-1);
+  color: var(--text-2);
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    opacity $transition,
+    color $transition,
+    border-color $transition;
+}
+
+.settings-page__button:hover {
+  color: var(--danger);
+  border-color: var(--border-hover);
+}
+
+.settings-page__button--accent {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.settings-page__button--accent:hover {
+  color: var(--accent-contrast);
+  opacity: 0.9;
+}
+
+.settings-page__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

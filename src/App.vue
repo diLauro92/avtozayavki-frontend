@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ThemeToggle from '@/common-components/theme-toggle/index.vue'
-import { useAuthStore } from "@/stores";
-import { useRouter } from "vue-router";
+import { useAuthStore } from '@/stores'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -17,6 +17,14 @@ async function handleLogout(): Promise<void> {
     <header class="app-shell__bar">
       <span class="app-shell__brand">АвтоЗаявки</span>
       <div class="app-shell__actions">
+        <RouterLink
+          v-if="authStore.isAuthenticated"
+          class="app-shell__nav-link"
+          :to="{ name: 'settings' }"
+        >
+          Настройки
+        </RouterLink>
+
         <ThemeToggle />
 
         <button

@@ -1,1 +1,4 @@
 export const POLLING_INTERVAL = 15000
+
+export const TELEGRAM_POLL_INTERVAL = 3000
+export const TELEGRAM_POLL_LIMIT = 40

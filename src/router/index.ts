@@ -23,6 +23,11 @@ const router = createRouter({
       name: 'request',
       component: () => import('@/routes/request-page/index.vue'),
     },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('@/routes/settings-page/index.vue'),
+    },
   ],
 })
 
