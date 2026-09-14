@@ -17,6 +17,10 @@
   color: var(--text);
 }
 
+.app-shell__brand:hover {
+  color: var(--accent-text);
+}
+
 .app-shell__body {
   padding: 0;
 }

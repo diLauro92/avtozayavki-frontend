@@ -15,7 +15,7 @@ async function handleLogout(): Promise<void> {
 <template>
   <div class="app-shell">
     <header class="app-shell__bar">
-      <span class="app-shell__brand">АвтоЗаявки</span>
+      <RouterLink class="app-shell__brand" :to="{ name: 'requests' }">АвтоЗаявки</RouterLink>
       <div class="app-shell__actions">
         <RouterLink
           v-if="authStore.isAuthenticated"
