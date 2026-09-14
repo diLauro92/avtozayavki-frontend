@@ -6,7 +6,11 @@ export type {
   RequestUrgency,
   CreateRequestPayload,
   SlaZone,
-  Comment
+  Comment,
+  RequestResponsible,
+  StatusHistoryItem,
+  RequestDetails,
+  RequestEvent,
 } from './request'
 
 export type { User } from './user'
