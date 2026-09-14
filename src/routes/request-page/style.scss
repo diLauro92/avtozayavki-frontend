@@ -233,3 +233,109 @@
   font-size: 13px;
   color: var(--text-3);
 }
+
+.request-page__work {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 28px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  background: var(--surface-1);
+}
+
+.request-page__field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.request-page__label {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.request-page__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.request-page__input,
+.request-page__textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: $font-body;
+  font-size: 15px;
+  transition: border-color $transition;
+}
+
+.request-page__input {
+  flex: 0 1 240px;
+  min-width: 180px;
+}
+
+.request-page__textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.request-page__input:focus,
+.request-page__textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.request-page__action {
+  flex-shrink: 0;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  transition: border-color $transition, color $transition;
+}
+
+.request-page__action:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.request-page__action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.request-page__work-error {
+  margin: 0;
+  font-size: 14px;
+  color: var(--danger);
+}
+
+.request-page__event--comment::before {
+  background: var(--accent);
+}
+
+.request-page__event--comment .request-page__event-text {
+  flex-basis: 100%;
+  order: 3;
+  margin-top: 2px;
+  padding: 10px 12px;
+  border-radius: $radius-md;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.request-page__event--comment .request-page__event-author {
+  order: 2;
+}

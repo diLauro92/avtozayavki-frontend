@@ -4,9 +4,11 @@ import { ref } from 'vue'
 
 import type { CreateRequestPayload, Request, RequestStatus } from '@/types'
 import {
+  addComment as addCommentApi,
   createRequest as createRequestApi,
   fetchRequestById,
   fetchRequests,
+  updateNextContact as updateNextContactApi,
   updateRequestStatus,
 } from '@/api/requests.api'
 import type { RequestDetails } from '@/types/request.ts'
@@ -70,6 +72,16 @@ export const useRequestsStore = defineStore('requests', () => {
     }
   }
 
+  async function addComment(id: number, body: string): Promise<void> {
+    await addCommentApi(id, body)
+    await loadRequest(id)
+  }
+
+  async function saveNextContact(id: number, nextContactAt: string | null): Promise<void> {
+    await updateNextContactApi(id, nextContactAt)
+    await loadRequest(id)
+  }
+
   return {
     list,
     isLoaded,
@@ -82,5 +94,7 @@ export const useRequestsStore = defineStore('requests', () => {
     loadRequest,
     lastSyncedAt,
     isStale,
+    addComment,
+    saveNextContact,
   }
 })

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import type { RequestStatus } from '@/types'
+import type { RequestDetails, RequestEvent, RequestStatus } from '@/types'
 import { useRequestsStore } from '@/stores'
 import { useNow } from '@/composables/useNow'
 import { ApiError } from '@/api/http'
@@ -25,6 +25,13 @@ const store = useRequestsStore()
 const { now } = useNow()
 
 const errorMessage = ref('')
+const workError = ref('')
+
+const commentInput = ref('')
+const nextContactInput = ref('')
+
+const isSavingComment = ref(false)
+const isSavingNextContact = ref(false)
 
 const requestId = computed(() => Number(route.params.id))
 const request = computed(() => store.current)
@@ -47,15 +54,80 @@ const facts = computed(() => {
   ]
 })
 
+const events = computed<RequestEvent[]>(() => {
+  const item = request.value
+
+  if (!item) return []
+
+  const statusEvents: RequestEvent[] = item.status_history.map((entry) => ({
+    id: `status-${entry.id}`,
+    type: 'status',
+    createdAt: entry.created_at,
+    authorName: entry.changed_by_name,
+    text: entry.old_status
+      ? `${getStatusText(entry.old_status)} → ${getStatusText(entry.new_status)}`
+      : 'Заявка создана',
+    status: entry.new_status,
+  }))
+
+  const commentEvents: RequestEvent[] = item.comments.map((comment) => ({
+    id: `comment-${comment.id}`,
+    type: 'comment',
+    createdAt: comment.created_at,
+    authorName: comment.author_name,
+    text: comment.body,
+  }))
+
+  return [...statusEvents, ...commentEvents].sort((a, b) => {
+    return new Date(a.createdAt ?? 0).getTime() - new Date(b.createdAt ?? 0).getTime()
+  })
+})
+
+function toInputValue(iso: string | null): string {
+  if (!iso) return ''
+
+  const date = new Date(iso)
+  const pad = (value: number) => String(value).padStart(2, '0')
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
 function eventTime(iso: string | null): string {
   return iso ? formatDateTime(iso) : 'время неизвестно'
 }
 
-function eventText(oldStatus: RequestStatus | null, newStatus: RequestStatus): string {
-  if (!oldStatus) return 'Заявка создана'
+async function saveComment(): Promise<void> {
+  workError.value = ''
+  isSavingComment.value = true
 
-  return `${getStatusText(oldStatus)} → ${getStatusText(newStatus)}`
+  try {
+    await store.addComment(requestId.value, commentInput.value.trim())
+    commentInput.value = ''
+  } catch (error) {
+    workError.value = error instanceof ApiError ? error.message : 'Не удалось добавить комментарий.'
+  } finally {
+    isSavingComment.value = false
+  }
 }
+
+async function saveNextContact(): Promise<void> {
+  workError.value = ''
+  isSavingNextContact.value = true
+
+  try {
+    const value = nextContactInput.value ? new Date(nextContactInput.value).toISOString() : null
+
+    await store.saveNextContact(requestId.value, value)
+  } catch (error) {
+    workError.value = error instanceof ApiError ? error.message : 'Не удалось сохранить дату.'
+  } finally {
+    isSavingNextContact.value = false
+  }
+}
+
+watch(request, (value: RequestDetails | null) => {
+  nextContactInput.value = toInputValue(value?.next_contact_at ?? null)
+})
 
 onMounted(async () => {
   try {
@@ -115,20 +187,68 @@ onMounted(async () => {
         </div>
       </dl>
 
-      <h2 class="request-page__subtitle">История</h2>
+      <h2 class="request-page__subtitle">Работа по заявке</h2>
+
+      <div class="request-page__work">
+        <div class="request-page__field">
+          <label class="request-page__label" for="next-contact">Перезвонить</label>
+
+          <div class="request-page__row">
+            <input
+              id="next-contact"
+              v-model="nextContactInput"
+              class="request-page__input"
+              type="datetime-local"
+            />
+
+            <button
+              class="request-page__action"
+              type="button"
+              :disabled="isSavingNextContact"
+              @click="saveNextContact"
+            >
+              {{ isSavingNextContact ? 'Сохраняем…' : 'Сохранить' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="request-page__field">
+          <label class="request-page__label" for="comment">Комментарий</label>
+
+          <textarea
+            id="comment"
+            v-model="commentInput"
+            class="request-page__textarea"
+            rows="3"
+            placeholder="Что выяснили, о чём договорились"
+          ></textarea>
+
+          <button
+            class="request-page__action"
+            type="button"
+            :disabled="!commentInput.trim() || isSavingComment"
+            @click="saveComment"
+          >
+            {{ isSavingComment ? 'Добавляем…' : 'Добавить комментарий' }}
+          </button>
+        </div>
+
+        <p v-if="workError" class="request-page__work-error">{{ workError }}</p>
+      </div>
 
       <ol class="request-page__timeline">
         <li
-          v-for="item in request.status_history"
-          :key="item.id"
+          v-for="event in events"
+          :key="event.id"
           class="request-page__event"
-          :class="`request-page__event--${getStatusColor(item.new_status)}`"
+          :class="[
+            `request-page__event--${event.type}`,
+            event.status ? `request-page__event--${getStatusColor(event.status)}` : '',
+          ]"
         >
-          <time class="request-page__event-time">{{ eventTime(item.created_at) }}</time>
-          <span class="request-page__event-text">{{
-            eventText(item.old_status, item.new_status)
-          }}</span>
-          <span class="request-page__event-author">{{ item.changed_by_name ?? 'система' }}</span>
+          <time class="request-page__event-time">{{ eventTime(event.createdAt) }}</time>
+          <span class="request-page__event-text">{{ event.text }}</span>
+          <span class="request-page__event-author">{{ event.authorName ?? 'система' }}</span>
         </li>
       </ol>
     </template>

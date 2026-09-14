@@ -50,4 +50,21 @@ export interface StatusHistoryItem {
 export interface RequestDetails extends Request {
   responsible: RequestResponsible | null
   status_history: StatusHistoryItem[]
+  comments: Comment[]
+}
+
+export interface Comment {
+  id: number
+  body: string
+  author_name: string | null
+  created_at: string
+}
+
+export interface RequestEvent {
+  id: string
+  type: 'status' | 'comment'
+  createdAt: string | null
+  authorName: string | null
+  text: string
+  status?: RequestStatus
 }
