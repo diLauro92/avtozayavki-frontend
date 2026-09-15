@@ -1,4 +1,11 @@
-import type { Comment, CreateRequestPayload, Request, RequestDetails, RequestStatus } from '@/types'
+import type {
+  Comment,
+  CreateRequestPayload,
+  Request,
+  RequestDetails,
+  RequestHistoryItem,
+  RequestStatus,
+} from '@/types'
 import { http } from './http'
 
 interface ListResponse<T> {
@@ -7,6 +14,11 @@ interface ListResponse<T> {
 
 interface ItemResponse<T> {
   data: T
+}
+
+interface HistoryResponse {
+  data: RequestHistoryItem[]
+  total: number
 }
 
 export async function fetchRequests(): Promise<Request[]> {
@@ -51,4 +63,10 @@ export async function updateNextContact(
   )
 
   return response.data.data
+}
+
+export async function fetchRequestHistory(id: number): Promise<HistoryResponse> {
+  const response = await http.get<HistoryResponse>(`/api/requests/${id}/history`)
+
+  return response.data
 }

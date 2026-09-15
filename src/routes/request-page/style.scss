@@ -4,6 +4,10 @@
   max-width: 760px;
   padding-top: 20px;
   padding-bottom: 48px;
+
+  @include laptop {
+    max-width: 1280px;
+  }
 }
 
 .request-page__back {
@@ -18,6 +22,37 @@
 
 .request-page__back:hover {
   color: var(--accent-text);
+}
+
+.request-page__layout {
+  display: grid;
+  gap: 24px;
+
+  @include laptop {
+    grid-template-columns: minmax(0, 1fr) 380px;
+    align-items: start;
+  }
+}
+
+.request-page__main {
+  min-width: 0;
+}
+
+.request-page__side {
+  min-width: 0;
+
+  @include laptop {
+    position: sticky;
+    top: 20px;
+  }
+}
+
+.request-page__side .request-page__section-toggle:first-child {
+  margin-top: 0;
+}
+
+.request-page__main .request-page__section-toggle:last-child {
+  margin-bottom: 0;
 }
 
 .request-page__back-icon {
@@ -41,7 +76,7 @@
 }
 
 .request-page__hero {
-  padding: 22px;
+  padding: 16px 18px;
   border: 1px solid var(--border);
   border-radius: $radius-xl;
   background: var(--surface-1);
@@ -77,7 +112,7 @@
 .request-page__client {
   margin-bottom: 6px;
   font-family: $font-display;
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 1.15;
   color: var(--text);
@@ -90,7 +125,7 @@
 .request-page__phone {
   display: block;
   font-family: $font-display;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 500;
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
@@ -108,8 +143,8 @@
 
 .request-page__call {
   display: block;
-  margin-top: 18px;
-  padding: 13px;
+  margin-top: 14px;
+  padding: 11px;
   border-radius: $radius-md;
   background: var(--accent);
   color: var(--accent-contrast);
@@ -120,6 +155,7 @@
 
   @include tablet {
     display: inline-block;
+    margin-top: 18px;
     padding: 11px 28px;
   }
 }
@@ -179,6 +215,30 @@
   display: flex;
   flex-direction: column;
   list-style: none;
+}
+
+.request-page__section-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 28px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-family: $font-display;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.request-page__section-icon {
+  color: var(--text-3);
+  transition: transform $transition;
+}
+
+.request-page__section-toggle--open .request-page__section-icon {
+  transform: rotate(180deg);
 }
 
 .request-page__event {
@@ -277,8 +337,8 @@
 }
 
 .request-page__input {
-  flex: 0 1 240px;
-  min-width: 180px;
+  flex: 1 1 200px;
+  min-width: 0;
 }
 
 .request-page__textarea {

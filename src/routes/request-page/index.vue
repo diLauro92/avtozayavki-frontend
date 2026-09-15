@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import type { RequestDetails, RequestEvent, RequestStatus } from '@/types'
+import type { RequestDetails, RequestEvent } from '@/types'
 import { useRequestsStore } from '@/stores'
 import { useNow } from '@/composables/useNow'
 import { ApiError } from '@/api/http'
@@ -19,6 +19,7 @@ import {
 import Icon from '@/common-components/icon/index.vue'
 import StatusSelect from '@/components/status-select/index.vue'
 import SlaIndicator from '@/components/sla-indicator/index.vue'
+import ClientHistory from '@/components/client-history/index.vue'
 
 const route = useRoute()
 const store = useRequestsStore()
@@ -32,6 +33,8 @@ const nextContactInput = ref('')
 
 const isSavingComment = ref(false)
 const isSavingNextContact = ref(false)
+const isTimelineOpen = ref(true)
+const isWorkOpen = ref(true)
 
 const requestId = computed(() => Number(route.params.id))
 const request = computed(() => store.current)
@@ -138,6 +141,8 @@ onMounted(async () => {
         ? 'Заявка не найдена. Возможно, её удалили.'
         : 'Не удалось загрузить заявку. Обновите страницу.'
   }
+
+  isTimelineOpen.value = window.matchMedia('(min-width: 1366px)').matches
 })
 </script>
 
@@ -153,104 +158,130 @@ onMounted(async () => {
     <p v-else-if="store.isCurrentLoading" class="request-page__loading">Загружаем заявку…</p>
 
     <template v-else-if="request">
-      <header class="request-page__hero">
-        <div class="request-page__hero-top">
-          <span class="request-page__num">#{{ request.id }}</span>
+      <div class="request-page__layout">
+        <div class="request-page__main">
+          <header class="request-page__hero">
+            <div class="request-page__hero-top">
+              <span class="request-page__num">#{{ request.id }}</span>
 
-          <div class="request-page__hero-meta">
-            <SlaIndicator
-              v-if="slaZone"
-              :zone="slaZone"
-              :progress="slaProgress"
-              :minutes="slaMinutes"
-            />
+              <div class="request-page__hero-meta">
+                <SlaIndicator
+                  v-if="slaZone"
+                  :zone="slaZone"
+                  :progress="slaProgress"
+                  :minutes="slaMinutes"
+                />
 
-            <StatusSelect :request-id="request.id" :status="request.status" />
-          </div>
-        </div>
+                <StatusSelect :request-id="request.id" :status="request.status" />
+              </div>
+            </div>
 
-        <h1 class="request-page__client">{{ request.client_name ?? 'Без имени' }}</h1>
+            <h1 class="request-page__client">{{ request.client_name ?? 'Без имени' }}</h1>
 
-        <a class="request-page__phone" :href="`tel:+${request.phone}`">
-          {{ formatPhone(request.phone) }}
-        </a>
+            <a class="request-page__phone" :href="`tel:+${request.phone}`">
+              {{ formatPhone(request.phone) }}
+            </a>
 
-        <a class="request-page__call" :href="`tel:+${request.phone}`">Позвонить</a>
-      </header>
+            <a class="request-page__call" :href="`tel:+${request.phone}`">Позвонить</a>
+          </header>
 
-      <p class="request-page__problem">{{ request.problem }}</p>
+          <p class="request-page__problem">{{ request.problem }}</p>
 
-      <dl class="request-page__facts">
-        <div v-for="fact in facts" :key="fact.key" class="request-page__fact">
-          <dt class="request-page__fact-key">{{ fact.key }}</dt>
-          <dd class="request-page__fact-value">{{ fact.value }}</dd>
-        </div>
-      </dl>
-
-      <h2 class="request-page__subtitle">Работа по заявке</h2>
-
-      <div class="request-page__work">
-        <div class="request-page__field">
-          <label class="request-page__label" for="next-contact">Перезвонить</label>
-
-          <div class="request-page__row">
-            <input
-              id="next-contact"
-              v-model="nextContactInput"
-              class="request-page__input"
-              type="datetime-local"
-            />
-
-            <button
-              class="request-page__action"
-              type="button"
-              :disabled="isSavingNextContact"
-              @click="saveNextContact"
-            >
-              {{ isSavingNextContact ? 'Сохраняем…' : 'Сохранить' }}
-            </button>
-          </div>
-        </div>
-
-        <div class="request-page__field">
-          <label class="request-page__label" for="comment">Комментарий</label>
-
-          <textarea
-            id="comment"
-            v-model="commentInput"
-            class="request-page__textarea"
-            rows="3"
-            placeholder="Что выяснили, о чём договорились"
-          ></textarea>
+          <dl class="request-page__facts">
+            <div v-for="fact in facts" :key="fact.key" class="request-page__fact">
+              <dt class="request-page__fact-key">{{ fact.key }}</dt>
+              <dd class="request-page__fact-value">{{ fact.value }}</dd>
+            </div>
+          </dl>
 
           <button
-            class="request-page__action"
+            class="request-page__section-toggle"
+            :class="{ 'request-page__section-toggle--open': isTimelineOpen }"
             type="button"
-            :disabled="!commentInput.trim() || isSavingComment"
-            @click="saveComment"
+            :aria-expanded="isTimelineOpen"
+            @click="isTimelineOpen = !isTimelineOpen"
           >
-            {{ isSavingComment ? 'Добавляем…' : 'Добавить комментарий' }}
+            События · {{ events.length }}
+            <Icon icon-name="chevron" :size="14" class="request-page__section-icon" />
           </button>
+
+          <ol v-if="isTimelineOpen" class="request-page__timeline">
+            <li
+              v-for="event in events"
+              :key="event.id"
+              class="request-page__event"
+              :class="[
+                `request-page__event--${event.type}`,
+                event.status ? `request-page__event--${getStatusColor(event.status)}` : '',
+              ]"
+            >
+              <time class="request-page__event-time">{{ eventTime(event.createdAt) }}</time>
+              <span class="request-page__event-text">{{ event.text }}</span>
+              <span class="request-page__event-author">{{ event.authorName ?? 'система' }}</span>
+            </li>
+          </ol>
         </div>
 
-        <p v-if="workError" class="request-page__work-error">{{ workError }}</p>
-      </div>
+        <aside class="request-page__side">
+          <button
+            class="request-page__section-toggle"
+            :class="{ 'request-page__section-toggle--open': isWorkOpen }"
+            type="button"
+            :aria-expanded="isWorkOpen"
+            @click="isWorkOpen = !isWorkOpen"
+          >
+            Работа по заявке
+            <Icon icon-name="chevron" :size="14" class="request-page__section-icon" />
+          </button>
+          <div v-if="isWorkOpen" class="request-page__work">
+            <div class="request-page__field">
+              <label class="request-page__label" for="next-contact">Перезвонить</label>
 
-      <ol class="request-page__timeline">
-        <li
-          v-for="event in events"
-          :key="event.id"
-          class="request-page__event"
-          :class="[
-            `request-page__event--${event.type}`,
-            event.status ? `request-page__event--${getStatusColor(event.status)}` : '',
-          ]"
-        >
-          <time class="request-page__event-time">{{ eventTime(event.createdAt) }}</time>
-          <span class="request-page__event-text">{{ event.text }}</span>
-          <span class="request-page__event-author">{{ event.authorName ?? 'система' }}</span>
-        </li>
-      </ol>
+              <div class="request-page__row">
+                <input
+                  id="next-contact"
+                  v-model="nextContactInput"
+                  class="request-page__input"
+                  type="datetime-local"
+                />
+
+                <button
+                  class="request-page__action"
+                  type="button"
+                  :disabled="isSavingNextContact"
+                  @click="saveNextContact"
+                >
+                  {{ isSavingNextContact ? 'Сохраняем…' : 'Сохранить' }}
+                </button>
+              </div>
+            </div>
+
+            <div class="request-page__field">
+              <label class="request-page__label" for="comment">Комментарий</label>
+
+              <textarea
+                id="comment"
+                v-model="commentInput"
+                class="request-page__textarea"
+                rows="3"
+                placeholder="Что выяснили, о чём договорились"
+              ></textarea>
+
+              <button
+                class="request-page__action"
+                type="button"
+                :disabled="!commentInput.trim() || isSavingComment"
+                @click="saveComment"
+              >
+                {{ isSavingComment ? 'Добавляем…' : 'Добавить комментарий' }}
+              </button>
+            </div>
+
+            <p v-if="workError" class="request-page__work-error">{{ workError }}</p>
+          </div>
+          <ClientHistory :request-id="requestId" />
+        </aside>
+      </div>
     </template>
   </section>
 </template>

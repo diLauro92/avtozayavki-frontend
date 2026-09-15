@@ -68,3 +68,11 @@ export interface RequestEvent {
   text: string
   status?: RequestStatus
 }
+
+export interface RequestHistoryItem {
+  id: number
+  status: RequestStatus
+  problem: string
+  car_info: string | null
+  created_at: string
+}

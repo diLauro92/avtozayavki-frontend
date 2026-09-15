@@ -1,0 +1,96 @@
+.client-history__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 28px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-family: $font-display;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.client-history__icon {
+  color: var(--text-3);
+  transition: transform $transition;
+}
+
+.client-history__toggle--open .client-history__icon {
+  transform: rotate(180deg);
+}
+
+.client-history__note {
+  font-size: 14px;
+  color: var(--text-3);
+}
+
+.client-history__error {
+  font-size: 14px;
+  color: var(--danger);
+}
+
+.client-history__list {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.client-history__item {
+  border-bottom: 1px solid var(--border);
+}
+
+.client-history__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 0;
+  text-align: left;
+}
+
+.client-history__number {
+  font-family: $font-mono;
+  font-size: 13px;
+  color: var(--text-3);
+  transition: color $transition;
+}
+
+.client-history__row:hover .client-history__number {
+  color: var(--accent-text);
+}
+
+.client-history__date {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+.client-history__details {
+  padding-bottom: 14px;
+}
+
+.client-history__problem {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.client-history__car {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.client-history__link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+.client-history__link:hover {
+  text-decoration: underline;
+}
