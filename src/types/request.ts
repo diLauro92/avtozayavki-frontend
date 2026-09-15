@@ -51,6 +51,7 @@ export interface RequestDetails extends Request {
   responsible: RequestResponsible | null
   status_history: StatusHistoryItem[]
   comments: Comment[]
+  photos: Photo[]
 }
 
 export interface Comment {
@@ -74,5 +75,15 @@ export interface RequestHistoryItem {
   status: RequestStatus
   problem: string
   car_info: string | null
+  created_at: string
+}
+
+export interface Photo {
+  id: number
+  url: string
+  thumb_url: string
+  width: number
+  height: number
+  source: RequestSource
   created_at: string
 }

@@ -20,6 +20,7 @@ import Icon from '@/common-components/icon/index.vue'
 import StatusSelect from '@/components/status-select/index.vue'
 import SlaIndicator from '@/components/sla-indicator/index.vue'
 import ClientHistory from '@/components/client-history/index.vue'
+import RequestPhotos from '@/components/request-photos/index.vue'
 
 const route = useRoute()
 const store = useRequestsStore()
@@ -186,6 +187,8 @@ onMounted(async () => {
           </header>
 
           <p class="request-page__problem">{{ request.problem }}</p>
+
+          <RequestPhotos :photos="request.photos" />
 
           <dl class="request-page__facts">
             <div v-for="fact in facts" :key="fact.key" class="request-page__fact">
