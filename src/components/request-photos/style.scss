@@ -14,8 +14,8 @@
 
 .request-photos__item {
   flex: 0 0 auto;
-  display: block;
   width: 96px;
+  height: 96px;
   padding: 0;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -32,7 +32,8 @@
 .request-photos__img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   transition: transform $transition;
 }
 

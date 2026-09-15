@@ -78,8 +78,6 @@ onBeforeUnmount(() => {
       <img
         class="request-photos__img"
         :src="photo.thumb_url"
-        :width="photo.width"
-        :height="photo.height"
         alt="Фото к заявке"
         loading="lazy"
       />
