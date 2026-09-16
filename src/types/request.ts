@@ -13,10 +13,8 @@ export interface Request {
   car_info: string | null
   problem: string
   urgency: RequestUrgency | null
-  files: string[] | null
   status: RequestStatus
   responsible_id: number | null
-  comment: string | null
   next_contact_at: string | null
   request_type: 'client'
   created_at: string
