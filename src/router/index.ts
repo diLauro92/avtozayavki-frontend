@@ -28,6 +28,27 @@ const router = createRouter({
       name: 'settings',
       component: () => import('@/routes/settings-page/index.vue'),
     },
+    {
+      path: '/privacy',
+      name: 'privacy',
+      component: () => import('@/routes/legal-page/index.vue'),
+      props: { slug: 'privacy' },
+      meta: { public: true },
+    },
+    {
+      path: '/consent',
+      name: 'consent',
+      component: () => import('@/routes/legal-page/index.vue'),
+      props: { slug: 'consent' },
+      meta: { public: true },
+    },
+    {
+      path: '/terms',
+      name: 'terms',
+      component: () => import('@/routes/legal-page/index.vue'),
+      props: { slug: 'terms' },
+      meta: { public: true },
+    },
   ],
 })
 
@@ -43,9 +64,10 @@ router.beforeEach(async (to) => {
   }
 
   const isLoginPage = to.name === 'login'
+  const isPublicPage = to.meta.public === true
 
   // если не залогинен кидаем на логин и запоминаем, куда шли
-  if (!authStore.isAuthenticated && !isLoginPage) {
+  if (!authStore.isAuthenticated && !isLoginPage && !isPublicPage) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 
