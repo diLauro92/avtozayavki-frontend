@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
+const remember = ref(true)
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -20,7 +21,7 @@ async function handleSubmit(): Promise<void> {
   isLoading.value = true
 
   try {
-    await authStore.login(email.value, password.value)
+    await authStore.login(email.value, password.value, remember.value)
     const redirect = route.query.redirect
 
     router.push(typeof redirect === 'string' ? redirect : { name: 'requests' })
@@ -57,6 +58,11 @@ async function handleSubmit(): Promise<void> {
             type="password"
             autocomplete="current-password"
           />
+        </label>
+
+        <label class="login-page__remember">
+          <input v-model="remember" class="login-page__checkbox" type="checkbox" />
+          <span>Запомнить меня</span>
         </label>
 
         <p v-if="error" class="login-page__error">{{ error }}</p>

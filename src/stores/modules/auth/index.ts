@@ -8,8 +8,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => user.value !== null)
 
-  async function login(email: string, password: string): Promise<void> {
-    user.value = await authApi.login(email, password)
+  async function login(email: string, password: string, remember: boolean): Promise<void> {
+    user.value = await authApi.login(email, password, remember)
   }
 
   // восстановление сессии при старте (F5)
